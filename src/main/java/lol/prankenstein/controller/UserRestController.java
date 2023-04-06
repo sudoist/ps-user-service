@@ -1,7 +1,8 @@
 package lol.prankenstein.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.common.collect.FluentIterable;
+import com.google.common.primitives.Ints;
 
 import lol.prankenstein.Role;
 import lol.prankenstein.model.User;
@@ -40,47 +44,43 @@ public class UserRestController {
 	}
 
 	@GetMapping("/users/{id}")
-	User one(@PathVariable Long id) {
+	User one(@PathVariable int id) {
 		return repository.findById(id);
 	}
 
-	@SuppressWarnings("null")
+	// TODO: Remove duplicates or in UI	
 	@PostMapping("/users/search")
 	List<User> searchUser(@RequestBody User searchUser) {
 
-		List<User> results = null;
+		List<User> results = new ArrayList<>();
 
-		if (searchUser.getFirstName() != null && searchUser.getFirstName().isEmpty()) {
-			results.add(repository.findByFirstName(searchUser.getFirstName()));
+		if (searchUser.getFirstName() != null) {
+			results.addAll(repository.findByFirstName(searchUser.getFirstName()));
 		}
 
-		if (searchUser.getLastName() != null && searchUser.getLastName().isEmpty()) {
-			results.add(repository.findByLastName(searchUser.getLastName()));
+		if (searchUser.getLastName() != null) {
+			results.addAll(repository.findByLastName(searchUser.getLastName()));
+		}
+		System.out.println(searchUser.getUserName());
+		System.out.println(searchUser.getUserName() != null);
+		if (searchUser.getUserName() != null) {
+			results.addAll(repository.findByUserName(searchUser.getUserName()));
 		}
 
-		if (searchUser.getUserName() != null && searchUser.getUserName().isEmpty()) {
-			results.add(repository.findByUserName(searchUser.getUserName()));
-		}
-
-		if (searchUser.getEmail() != null && searchUser.getEmail().isEmpty()) {
-			results.add(repository.findByEmail(searchUser.getEmail()));
+		if (searchUser.getEmail() != null) {
+			results.addAll(repository.findByEmail(searchUser.getEmail()));
 		}
 
 		if (searchUser.getRole() != null) {
-			results.add(repository.findByRole(searchUser.getRole()));
-		}
-
-		if (results != null) {
-			List<User> distinctResults = results.stream().distinct().collect(Collectors.toList());
-
-			return distinctResults;
+			System.out.println("role");
+			results.addAll(repository.findByRole(searchUser.getRole()));
 		}
 
 		return results;
 	}
 
 //	@PutMapping("/Users/{id}")
-//	User updateUser(@RequestBody User updateUser, @PathVariable Long id) {
+//	User updateUser(@RequestBody User updateUser, @PathVariable int id) {
 //
 //		User user = this.repository.findById(id);
 //
@@ -99,7 +99,7 @@ public class UserRestController {
 //	}
 
 	@DeleteMapping("/Users/{id}")
-	void removeUser(@PathVariable Long id) {
+	void removeUser(@PathVariable int id) {
 		repository.deleteById(id);
 	}
 

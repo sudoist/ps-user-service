@@ -11,15 +11,15 @@ public interface UserRepository extends MongoRepository<User, String> {
     
     User findById(Long id);
     
-    User findByFirstName(String firstName);
+    List<User> findByFirstName(String firstName);
     
-    User findByLastName(String lastName);
+    List<User> findByLastName(String lastName);
     
-    User findByUserName(String userName);
+    List<User> findByUserName(String userName);
     
-    User findByEmail(String email);
+    List<User> findByEmail(String email);
     
-    User findByRole(Role role);
+    List<User> findByRole(Role role);
     
     List<User> findAll();
     
