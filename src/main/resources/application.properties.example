@@ -1,0 +1,3 @@
+
+spring.data.mongodb.uri=mongodb+srv://<username>:<password>@<host>/?retryWrites=true/<database>
+spring.data.mongodb.database=<database>
