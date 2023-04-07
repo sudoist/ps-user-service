@@ -21,7 +21,7 @@ public interface UserRepository extends MongoRepository<User, String> {
     
     List<User> findByRole(Role role);
     
-    List<User> findAll();
+    List<User> findAllOrderByOrderByIdAsc();
     
     User deleteById(Long id);
     
